@@ -1,0 +1,28 @@
+from tkinter import *
+
+N_ACHIEVED= "Don't be discouraged! While you didn't pass this time, remember that every attempt is a step closer to success. Review the material and try again—you've got this!"
+
+ACHIEVED="Well done! You've successfully passed the quiz. Your hard work is paying off, and with continued effort, you'll keep improving. Keep up the great work!"
+
+MERIT= "Great job! You scored a Merit on the quiz, showing a strong understanding of the material. Your dedication is evident, and you're just a step away from excellence. Keep pushing forward!"
+
+EXCELLENCE= "Congratulations! You've achieved Excellence on the quiz, demonstrating exceptional knowledge and understanding. Your effort and commitment have truly paid off. Keep up the outstanding work!"
+
+
+def MAIN_W():
+    introwindow = Tk()
+    introwindow.resizable(False, False)
+    introwindow.title("Year 10 Math Quiz")
+    introwindow.geometry("850x450")
+    introwindow.configure(bg="#d0e0e3")
+    
+    heading_canvas = Label(introwindow, width=60, height=1, text="INTRODUCTION", font="Verdana 19 bold", bg= "#cccccc"  ).place(x=-100, y=-3)
+
+    intro_text = Label(introwindow, width=40, anchor="center", text= "THIS QUIZ WILL TEST YOUR KNOWLEDGE \n ON YEAR 10 MATH \n \n"
+                       "THERE WILL BE A TOTAL OF 10 QUESTIONS.\n SELECT THE ANSWER CORRECT ANSWER OR SKIP \n 3 QUESTIONS \n \n"
+                       "PLEASE PRESS “BEGIN” ONCE YOU ARE READY"
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=110, y=80)
+
+ 
+    introwindow.mainloop()
+MAIN_W()
