@@ -1,0 +1,122 @@
+from tkinter import *
+import random 
+
+N_ACHIEVED= "Don't be discouraged! While you didn't pass this time, remember that every attempt is a step closer to success. Review the material and try again—you've got this!"
+
+ACHIEVED="Well done! You've successfully passed the quiz. Your hard work is paying off, and with continued effort, you'll keep improving. Keep up the great work!"
+
+MERIT= "Great job! You scored a Merit on the quiz, showing a strong understanding of the material. Your dedication is evident, and you're just a step away from excellence. Keep pushing forward!"
+
+EXCELLENCE= "Congratulations! You've achieved Excellence on the quiz, demonstrating exceptional knowledge and understanding. Your effort and commitment have truly paid off. Keep up the outstanding work!"
+
+
+# Array of questions
+questions = [
+    "Simplify 4x+2x-x",
+    "Simplify 4c*2d",
+    "Simplify 30a^3/6a",
+    "Simplify (3b^2)^3",
+    "Simplify 3a^3b * 5bc * 2ac^2",
+    "Expand 2(x+4)+(5(x+3))",
+    "Expand 3(x+5)+2(x+1)",
+    "If two sets of brackets added result in 7x-5, what could they be?",
+    "Expand 3(2x-7)-2(x-2)",
+    "Expand 3(2x+5)+2(x-3)",
+    "Expand 4(x-3)",
+    "Expand x(x+4)",
+    "Expand 2x(x+9)",
+    "Expand x^2(3x+y)",
+    "Expand 2y^2(y-x)",
+    "Factor x^2 + 7x + 10",
+    "Factor x^2 + 7x + 12",
+    "Factor x^2 + 13x + 12",
+    "Factor x^2 + 22x + 21",
+    "Factor x^2 + 10x + 16"
+]
+
+# Array of answers
+answers = [
+    "5x",
+    "8cd",
+    "5a^2",
+    "27b^6",
+    "30a^5b^2c^3",
+    "7x+23",
+    "5x+17",
+    "5(x+3) + 2(x-5)",
+    "4x-17",
+    "8x+9",
+    "4x-12",
+    "x^2 + 4x",
+    "2x^2 + 18x",
+    "3x^3 + x^2y",
+    "2y^3 - 2xy^2",
+    "(x+2)(x+5)",
+    "(x+3)(x+4)",
+    "(x+12)(x+1)",
+    "(x+21)(x+1)",
+    "(x+8)(x+2)"
+]
+
+# Shuffle questions and answers simultaneously
+combined = list(zip(questions, answers))
+random.shuffle(combined)
+questions_shuffled, answers_shuffled = zip(*combined)
+
+# Example usage:
+
+
+
+for i in range(min(10, len(questions_shuffled))):
+    print(f"Question {i+1}: {questions_shuffled[i]}")
+    print(f"Answer: {answers_shuffled[i]}\n")
+
+
+def QUIZ_QUESTION():
+    questionwindow = Tk()
+    questionwindow.resizable(False, False)
+    questionwindow.title("Year 10 Math Quiz")
+    questionwindow.geometry("700x450")
+    questionwindow.configure(bg="#d0e0e3")
+
+    q_heading_canvas = Label(questionwindow, width=80, height=1, text="QUESTION", font="Verdana 16 ", bg= "#cccccc"  ).place(x=-170, y=-3)
+
+    q_intro_text = Label(questionwindow, width=20,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= " QUESTION NUMBER: "
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=187, y=50)
+    
+    q_canvas = Canvas(questionwindow,highlightbackground = "black",height=200,width=300,).place(x=60,y=125)
+
+    
+    
+             
+
+def Q_REPEAT(introwindow):
+    introwindow.destroy()
+
+    SKIPS = 0 
+    CV = 0 
+    while CV == 10: 
+        return 
+    else: 
+        QUIZ_QUESTION()
+
+def MAIN_W():
+    introwindow = Tk()
+    introwindow.resizable(False, False)
+    introwindow.title("Year 10 Math Quiz")
+    introwindow.geometry("850x450")
+    introwindow.configure(bg="#d0e0e3")
+    
+    heading_canvas = Label(introwindow, width=80, height=1, text="INTRODUCTION", font="Verdana 16 ", bg= "#cccccc"  ).place(x=-95, y=-3)
+
+    intro_text = Label(introwindow, width=40,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= "THIS QUIZ WILL TEST YOUR KNOWLEDGE \n ON YEAR 10 MATH \n \n"
+                       "THERE WILL BE A TOTAL OF 10 QUESTIONS.\n SELECT THE ANSWER CORRECT ANSWER OR SKIP \n 3 QUESTIONS \n \n"
+                       "PLEASE PRESS “BEGIN” ONCE YOU ARE READY"
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=110, y=80)
+    
+    begin_button = Button(introwindow, width=15, height=1,borderwidth=0.5, text="BEGIN", font="Verdana 19", anchor="center",
+                          bg="#9fc5e8",  command=lambda: Q_REPEAT(introwindow) ).place(x=300, y=370)
+
+    introwindow.mainloop()
+MAIN_W()
+
