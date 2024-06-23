@@ -1,0 +1,96 @@
+from tkinter import *
+import random 
+
+N_ACHIEVED= "Don't be discouraged! While you didn't pass this time, remember that every attempt is a step closer to success. Review the material and try again—you've got this!"
+
+ACHIEVED="Well done! You've successfully passed the quiz. Your hard work is paying off, and with continued effort, you'll keep improving. Keep up the great work!"
+
+MERIT= "Great job! You scored a Merit on the quiz, showing a strong understanding of the material. Your dedication is evident, and you're just a step away from excellence. Keep pushing forward!"
+
+EXCELLENCE= "Congratulations! You've achieved Excellence on the quiz, demonstrating exceptional knowledge and understanding. Your effort and commitment have truly paid off. Keep up the outstanding work!"
+
+# Array of questions and answers combined
+qa_combined = [
+    ("Simplify 4x+2x-x", "5x"),
+    ("Simplify 4c*2d", "8cd"),
+    ("Is this the result afer simplifying 30a^3/6a? 2a/4^8", "No"),
+    ("Simplify (3b^2)^3", "27b^6"),
+    ("Simplify 3a^3b * 5bc * 2ac^2", "30a^5b^2c^3"),
+    ("Expand 2(x+4)+(5(x+3))", "7x+23"),
+    ("Expand 3(x+5)+2(x+1)", "5x+17"),
+    ("If two sets of brackets added result in 7x-5, what could they be?", "5(x+3) + 2(x-5)"),
+    ("Expand 3(2x-7)-2(x-2)", "4x-17"),
+    ("Expand 3(2x+5)+2(x-3)", "8x+9"),
+    ("Expand 4(x-3)", "4x-12"),
+    ("Expand x(x+4)", "x^2 + 4x"),
+    ("Is this result after expanding 2x(x+9)? 2x^2 + 18x ", "Yes"),
+    ("Expand x^2(3x+y)", "3x^3 + x^2y"),
+    ("Expand 2y^2(y-x)", "2y^3 - 2xy^2"),
+    ("Factor x^2 + 7x + 10", "(x+2)(x+5)"),
+    ("Factor x^2 + 7x + 12", "(x+3)(x+4)"),
+    ("Factor x^2 + 13x + 12", "(x+12)(x+1)"),
+    ("Factor x^2 + 22x + 21", "(x+21)(x+1)"),
+    ("Factor x^2 + 10x + 16", "(x+8)(x+2)")
+]
+
+# Shuffle questions and answers simultaneously
+random.shuffle(qa_combined)
+
+# Separate shuffled questions and answers
+questions_shuffled, answers_shuffled = zip(*qa_combined)      
+
+
+
+#for i in range(min(10, len(questions_shuffled))):
+   # print(f"Question {i+1}: {questions_shuffled[i]}")
+   # print(f"Answer: {answers_shuffled[i]}\n")
+
+def Q_REPEAT(introwindow):
+    introwindow.destroy()
+
+    SKIPS = 0 
+    CV = 0 
+    while CV == 10: 
+        return 
+    else: 
+        QUIZ_QUESTION()
+
+def QUIZ_QUESTION():
+    questionwindow = Tk()
+    questionwindow.resizable(False, False)
+    questionwindow.title("Year 10 Math Quiz")
+    questionwindow.geometry("700x450")
+    questionwindow.configure(bg="#d0e0e3")
+    
+
+    q_heading_canvas = Label(questionwindow, width=80, height=1, text="QUESTION", font="Verdana 18 ", bg= "#cccccc"  ).place(x=-170, y=-3)
+
+    q_intro_text = Label(questionwindow, width=20,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= " QUESTION NUMBER: "
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=187, y=50)
+    
+    q_canvas = Canvas(questionwindow,highlightbackground = "black",height=200,width=300,).place(x=60,y=125)
+    q_text = Label(q_canvas, text = questions_shuffled[0], font="Verdana 16",wraplength=300).place(x=200,y=185, anchor=CENTER)
+
+
+    
+def MAIN_W():
+    introwindow = Tk()
+    introwindow.resizable(False, False)
+    introwindow.title("Year 10 Math Quiz")
+    introwindow.geometry("850x450")
+    introwindow.configure(bg="#d0e0e3")
+    
+    heading_canvas = Label(introwindow, width=80, height=1, text="INTRODUCTION", font="Verdana 16 ", bg= "#cccccc"  ).place(x=-95, y=-3)
+
+    intro_text = Label(introwindow, width=40,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= "THIS QUIZ WILL TEST YOUR KNOWLEDGE \n ON YEAR 10 MATH \n \n"
+                       "THERE WILL BE A TOTAL OF 10 QUESTIONS.\n SELECT THE ANSWER CORRECT ANSWER OR SKIP \n 3 QUESTIONS \n \n"
+                       "PLEASE PRESS “BEGIN” ONCE YOU ARE READY"
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=110, y=80)
+    
+    begin_button = Button(introwindow, width=15, height=1,borderwidth=0.5, text="BEGIN", font="Verdana 19", anchor="center",
+                          bg="#9fc5e8",  command=lambda: Q_REPEAT(introwindow) ).place(x=300, y=370)
+    
+    
+    introwindow.mainloop()
+MAIN_W()
+
