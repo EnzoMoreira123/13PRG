@@ -1,0 +1,143 @@
+from tkinter import *
+from tkinter import Tk, Radiobutton, StringVar
+import random
+
+N_ACHIEVED= "Don't be discouraged! While you didn't pass this time, remember that every attempt is a step closer to success. Review the material and try again—you've got this!"
+
+ACHIEVED="Well done! You've successfully passed the quiz. Your hard work is paying off, and with continued effort, you'll keep improving. Keep up the great work!"
+
+MERIT= "Great job! You scored a Merit on the quiz, showing a strong understanding of the material. Your dedication is evident, and you're just a step away from excellence. Keep pushing forward!"
+
+EXCELLENCE= "Congratulations! You've achieved Excellence on the quiz, demonstrating exceptional knowledge and understanding. Your effort and commitment have truly paid off. Keep up the outstanding work!"
+
+# Array of questions and answers combined
+qa_combined = [
+    ("Simplify 4x + 2x - x", "5x", "6x", "3x", "4x + 2"),
+    ("Simplize 4c * 2d", "8cd", "6cd", "8c^2d", "4c^2d"),
+    ("Does 30a^3 / 6a simplify to 2a / 4^8?", "No", "Yes", "No, it simplifies to 5a^2", "No, it simplifies to 5a"),
+    ("Simplify (3b^2)^3", "27b^6", "9b^6", "81b^5", "27b^8"),
+    ("Simplify 3a^3b * 5bc * 2ac^2","30a^5b^2c^3", "30a^4b^2c^3", "15a^4b^2c^3", "30a^5bc^3"),
+    ("Expand 2(x + 4) + 5(x + 3)", "7x + 23", "7x + 22", "7x + 19", "7x + 20"),
+    ("Expand 3(x + 5) + 2(x + 1)", "5x + 17", "5x + 16", "6x + 17", "5x + 18"),
+    ("If two sets of brackets added results in 7x - 5, what could they be?", "5(x - 3) + 2(x + 5)", "3(x - 2) + 4(x + 1)", "2(x - 4) + 5(x + 2)", "4(x - 1) + 3(x + 2)"),
+    ("Expand 3(2x - 7) - 2(x - 2)", "4x - 17", "6x - 23", "4x - 19", "5x - 23"),
+    ("Expand 3(2x + 5) + 2(x - 3)", "8x + 9", "8x + 7", "10x + 9", "6x + 9"),
+    ("Expand 4(x - 3)", "4x - 12", "4x - 9", "4x - 15", "4x - 6"),
+    ("Expand x(x + 4)", "x^2 + 4x", "x^2 + 3x", "x^2 + 5x", "x^2 + 6x"),
+    ("Does 2x(x + 9) simplify to 2x^2 + 18x?", "Yes", "No, it simplifies to 2x^2 + 9x", "No, it simplifies to 2x^2 + 20x", "No, it simplifies to 2x^2 + 19x"),
+    ("Expand x^2(3x + y)", "3x^3 + x^2y", "3x^3 + 2x^2y", "3x^3 + 3xy", "3x^3 + xy^2"),
+    ("Expand 2y^2(y - x)", "2y^3 - 2xy^2", "2y^3 - yx^2", "2y^3 - 2y^2x", "2y^3 - y^2x"),
+    ("Factor x^2 + 7x + 10", "(x + 2)(x + 5)", "(x + 1)(x + 10)", "(x + 5)(x + 2)", "(x + 3)(x + 4)"),
+    ("Factor x^2 + 7x + 12", "(x + 3)(x + 4)", "(x + 1)(x + 12)", "(x + 2)(x + 6)", "(x + 4)(x + 3)"),
+    ("Factor x^2 + 13x + 12", "(x + 12)(x + 1)", "(x + 4)(x + 9)", "(x + 3)(x + 4)", "(x + 6)(x + 7)"),
+    ("Factor x^2 + 22x + 21", "(x + 21)(x + 1)", "(x + 20)(x + 1)", "(x + 11)(x + 11)", "(x + 22)(x + 1)"),
+    ("Factor x^2 + 10x + 16", "(x + 8)(x + 2)", "(x + 5)(x + 3)", "(x + 4)(x + 4)", "(x + 6)(x + 4)")
+]
+
+answers1=[]
+for i in qa_combined:
+
+    answers1.append(i[1])
+
+#print(answers)
+
+# Shuffle the combined list
+random.shuffle(qa_combined)
+
+# Separate the first and second items of each tuple
+questions = [item[0] for item in qa_combined]
+correct_answers = [item[1] for item in qa_combined]
+
+# Combine them back into a list of tuples
+qa_separated = list(zip(questions, correct_answers))
+
+# Print the result
+print("Combined Questions and Answers:")
+print(qa_separated)
+
+def RESULT_W():
+    resultswindow = Tk()
+    resultswindow.resizable(False, False)
+    resultswindow.title("Year 10 Math Quiz")
+    resultswindow.geometry("850x450")
+    resultswindow.configure(bg="#d0e0e3")
+
+    def exit():
+        resultswindow.destroy()
+
+    # "Exit" button (appears to be functional)
+    exit_button = Button(resultswindow, text="Exit", font="Verdana 18", bg="#9fc5e8", command=exit).place(x=785,y=0)
+
+def Q_REPEAT(introwindow):
+    introwindow.destroy()
+
+    SKIPS = 0 
+    CV = 0 
+    while CV == 10: 
+        return 
+    else: 
+        QUIZ_QUESTION()
+
+def QUIZ_QUESTION():
+    questionwindow = Tk()
+    questionwindow.resizable(False, False)
+    questionwindow.title("Year 10 Math Quiz")
+    questionwindow.geometry("700x450")
+    questionwindow.configure(bg="#d0e0e3")
+    
+    q_heading_canvas = Label(questionwindow, width=80, height=1, text="QUESTION", font="Verdana 18 ", bg="#cccccc")
+    q_heading_canvas.place(x=-245, y=-3)
+
+    q_intro_text = Label(questionwindow, width=20, borderwidth=1, highlightbackground="black", relief="solid",
+                         anchor="center", text=" QUESTION NUMBER: ", font="Verdana 19", bg="#9fc5e8")
+    q_intro_text.place(x=187, y=50)
+    
+    # Create Canvas and place it
+    q_canvas = Canvas(questionwindow, highlightbackground="black", height=200, width=300)
+    q_canvas.place(x=60, y=125)
+
+    # Create Label inside Canvas with the shuffled question
+    question_text = questions[0]  # Assuming questions_shuffled is a list of strings
+    q_text = Label(q_canvas, text=question_text, font="Verdana 18", wraplength=280).place(relx=0.5, rely=0.5, anchor=CENTER)
+
+    def skip_action():
+        questionwindow.destroy()
+        RESULT_W()
+
+    skip_button = Button(questionwindow, width=50, height=1, borderwidth=0.5, text="SKIP", font="Verdana 19", anchor="center",
+                          bg="#9fc5e8", command=skip_action).place(x=-40, y=400)
+    
+    selected_answer = StringVar(value=None)
+    for i, text in enumerate([correct_answers[0], correct_answers[1], correct_answers[2],correct_answers[3]]):
+        Radiobutton(
+        questionwindow,
+        height=1,
+        borderwidth=0.5,
+        text=text,
+        font="Verdana 15",
+        wraplength=280,
+        bg="#d0e0e3",
+        variable=selected_answer,
+        value=text
+    ).place(x=410, y=180 + (i - 1) * 50)
+        
+def MAIN_W():
+    introwindow = Tk()
+    introwindow.resizable(False, False)
+    introwindow.title("Year 10 Math Quiz")
+    introwindow.geometry("850x450")
+    introwindow.configure(bg="#d0e0e3")
+    
+    heading_canvas = Label(introwindow, width=80, height=1, text="INTRODUCTION", font="Verdana 16 ", bg= "#cccccc"  ).place(x=-95, y=-3)
+
+    intro_text = Label(introwindow, width=40,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= "THIS QUIZ WILL TEST YOUR KNOWLEDGE \n ON YEAR 10 MATH \n \n"
+                       "THERE WILL BE A TOTAL OF 10 QUESTIONS.\n SELECT THE ANSWER CORRECT ANSWER OR SKIP \n 3 QUESTIONS \n \n"
+                       "PLEASE PRESS “BEGIN” ONCE YOU ARE READY"
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=110, y=80)
+    
+    begin_button = Button(introwindow, width=15, height=1,borderwidth=0.5, text="BEGIN", font="Verdana 19", anchor="center",
+                          bg="#9fc5e8",  command=lambda: Q_REPEAT(introwindow) ).place(x=300, y=370)
+    
+    introwindow.mainloop()
+MAIN_W()
+
