@@ -1,0 +1,430 @@
+from tkinter import *
+from tkinter import Tk
+
+# Importing the random module to use its functions
+import random
+
+
+from tkinter import messagebox
+import os
+
+PERCENTAGE = 0
+
+N_ACHIEVED= "Don't be discouraged! While you didn't pass this time, remember that every attempt is a step closer to success. Review the material and try again—you've got this!"
+
+ACHIEVED="Well done! You've successfully passed the quiz. Your hard work is paying off, and with continued effort, you'll keep improving. Keep up the great work!"
+
+MERIT= "Great job! You scored a Merit on the quiz, showing a strong understanding of the material. Your dedication is evident, and you're just a step away from excellence. Keep pushing forward!"
+
+EXCELLENCE= "Congratulations! You've achieved Excellence on the quiz, demonstrating exceptional knowledge and understanding. Your effort and commitment have truly paid off. Keep up the outstanding work!"
+
+# List of questions and answer choices
+qa_combined = [
+    ("Simplify 4x + 2x - x", "5x", "6x", "3x", "4x + 2"),
+    ("Simplify 4c * 2d", "8cd", "6cd", "8c^2d", "4c^2d"),
+    ("Does 30a^3 / 6a simplify to 2a / 4^8?", "No", "Yes", ),
+    ("Simplify (3b^2)^3", "27b^6", "9b^6", "81b^5", "27b^8"),
+    ("Simplify 3a^3b * 5bc * 2ac^2","30a^5b^2c^3", "30a^4b^2c^3", "15a^4b^2c^3", "30a^5bc^3"),
+    ("Expand 2(x + 4) + 5(x + 3)", "7x + 23", "7x + 22","7x + 19", "7x + 20"),
+    ("Expand 3(x + 5) + 2(x + 1)", "5x + 17", "5x + 16", "6x + 17", "5x + 18"),
+    ("If two sets of brackets added results in 7x - 5, what could they be?", "5(x - 3) + 2(x + 5)", "3(x - 2) + 4(x + 1)", "2(x - 4) + 5(x + 2)", "4(x - 1) + 3(x + 2)"),
+    ("Expand 3(2x - 7) - 2(x - 2)", "4x - 17", "6x - 23", "4x - 19", "5x - 23"),
+    ("Expand 3(2x + 5) + 2(x - 3)", "8x + 9", "8x + 7", "10x + 9", "6x + 9"),
+    ("Expand 4(x - 3)", "4x - 12", "4x - 9", "4x - 15", "4x - 6"),
+    ("Expand x(x + 4)", "x^2 + 4x", "x^2 + 3x", "x^2 + 5x", "x^2 + 6x"),
+    ("Does 2x(x + 9) simplify to 2x^2 + 18x?", "Yes", "No"),
+    ("Expand x^2(3x + y)", "3x^3 + x^2y", "3x^3 + 2x^2y", "3x^3 + 3xy", "3x^3 + xy^2"),
+    ("Expand 2y^2(y - x)", "2y^3 - 2xy^2", "2y^3 - yx^2", "2y^3 - 2y^2x", "2y^3 - y^2x"),
+    ("Factor x^2 + 7x + 10", "(x + 2)(x + 5)", "(x + 1)(x + 10)", "(x + 6)(x + 2)", "(x + 3)(x + 4)"),
+    ("Factor x^2 + 7x + 12", "(x + 3)(x + 4)", "(x + 1)(x + 12)", "(x + 2)(x + 6)", "(x + 4)(x + 3)"),
+    ("Factor x^2 + 13x + 12", "(x + 12)(x + 1)", "(x + 4)(x + 9)", "(x + 3)(x + 4)", "(x + 6)(x + 7)"),
+    ("Factor x^2 + 22x + 21", "(x + 21)(x + 1)", "(x + 20)(x + 1)", "(x + 11)(x + 11)", "(x + 22)(x + 1)"),
+    ("Factor x^2 + 10x + 16", "(x + 8)(x + 2)", "(x + 5)(x + 3)", "(x + 4)(x + 4)", "(x + 6)(x + 4)")
+]
+
+# Initialize variables for tracking answers and scores
+selected_answers=[]
+correct_response=[]
+
+# Shuffle questions and separate answers. This is done by using the random. to shuffle the questions 
+# and answers to ensure a different order each time the quiz is taken
+random.shuffle(qa_combined)
+
+#Appends the second element of the qa_combined list to the correct_response list through a for next loop
+for i in qa_combined:
+    correct_response.append(i[1])
+
+# Separate the first and second items of each tuple
+questions = [item[0] for item in qa_combined]
+correct_answers = [item[1:] for item in qa_combined]
+
+# Combine them back into a list of tuples
+qa_separated = list(zip(questions, correct_answers))
+
+def RESULT_W(score):
+
+
+    """
+    Displays the results window with the user's quiz score and a corresponding message.
+    
+    Parameters:
+    score (int): The number of correct answers the user achieved in the quiz.
+    
+    This function performs the following tasks:
+    1. Calculates the percentage score based on the number of correct answers.
+    2. Creates and configures a Tkinter window to display the results.
+    3. Sets the title, size, and background color of the results window.
+    4. Determines the result message based on the user's percentage score.
+    5. Provides buttons for the user to either exit the results window or try the quiz again.
+    """
+    # Calculate the percentage score from the number of correct answers
+    PERCENTAGE= score*10
+
+    # Create the Tkinter window for displaying results
+    resultswindow = Tk()
+    resultswindow.resizable(False, False) # Prevent resizing of the window
+    resultswindow.title("Year 10 Math Quiz") # Set the window title
+
+    # Configure the window size and background color
+    resultswindow.geometry("700x450")
+    resultswindow.configure(bg="#d0e0e3")
+    resultswindow.geometry("%dx%d+%d+%d" % (700,450, 557,227.5))
+
+    def EXIT():  
+        """
+        Handles the action of closing the results window and opening the quiz results file.
+
+        This function performs the following tasks:
+        1. Extracts a subset of questions and correct answers (first 10 questions) for possible further use.
+        2. Opens the "quiz_results.txt" file to allow the user to review their results.
+        3. Closes the results window to end the results display session.
+
+        This function does not take any parameters and does not return any value.
+        """    
+        # Extract the first 10 questions and their correct answers (for possible further use)
+        shuffled_questions = questions[:10]
+        shuffled_correct_answers = [qa_combined[i][1] for i in range(10)]
+
+        # Open the quiz results file in the default application (e.g., Notepad on Windows)                   
+        os.startfile("quiz_results.txt")
+        
+        # Close the results window
+        resultswindow.destroy()    
+
+    
+    # Create and place the results label in the results window   
+    results_text = Label(resultswindow, width=20, borderwidth=1, highlightbackground="black", relief="solid",
+    anchor="center", text="RESULTS", font="Verdana 19", bg="#9fc5e8").place(x=187, y=50) 
+
+    # Create and place the "Exit" button in the results window
+    exit_button = Button(resultswindow, text="Exit", font="Verdana 18", bg="#9fc5e8", command=EXIT).place(x=634,y=0)
+
+    # Create and place the "Try Again" button in the results window
+    tryagain_button = Button(resultswindow, width=50, height=1, borderwidth=0.5,command= lambda:TRY_AGAIN(resultswindow), text="TRY AGAIN", font="Verdana 19", anchor="center",
+    bg="#9fc5e8",).place(x=-40, y=400)
+
+    # Determine the result message based on the score percentage using an if statement
+    if PERCENTAGE<29:
+        MESSAGE=N_ACHIEVED
+    elif PERCENTAGE>=30 and PERCENTAGE<49:
+        MESSAGE = ACHIEVED
+    elif PERCENTAGE>=50 and PERCENTAGE<79:
+        MESSAGE = MERIT
+    else:
+        MESSAGE=EXCELLENCE
+
+    # Create a Canvas widget for displaying the results in the results window
+    r_canvas = Canvas(resultswindow, highlightbackground="black", height=225, width=700)
+    r_canvas.place( y=125) #Defines the placement on screen
+
+    # Create a Label widget to display the percentage score and result message on the canvas
+    r_text = Label(r_canvas, text = f"PERCENTAGE: {PERCENTAGE}%\nMESSAGE: {MESSAGE}", font="Verdana 18", wraplength=500)
+    r_text.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+
+
+def Q_REPEAT(introwindow,score):
+    """
+    Handles the transition from the introductory window to the quiz questions window.
+
+    Parameters:
+    introwindow (Tk): The introductory window that will be closed to start the quiz.
+    score (int): The current score that will be passed to the quiz question window.
+
+    How It Works:
+    1. **Close the Introductory Window**:
+       - `introwindow.destroy()`:
+         - This method call closes and removes the introductory window from the display, effectively ending the introduction phase of the quiz.
+
+    2. **Start the Quiz with the Current Score**:
+       - `QUIZ_QUESTION(score)`:
+         - This function call initiates the quiz question display, passing the current score as an argument. The `QUIZ_QUESTION` function uses this score to track and update the user's performance throughout the quiz.
+
+    The `Q_REPEAT` function facilitates a smooth transition from the introductory phase to the quiz while preserving the user’s current score.
+    """
+
+    # Close the introductory window
+    introwindow.destroy() 
+
+    # Start the quiz questions with the current score
+    QUIZ_QUESTION(score)
+
+# Global variables to keep track of the current question index and the number of questions answered
+current_question_index = [0]
+questions_answered = [0]  # Use a list to make it mutable
+
+def QUIZ_QUESTION(score):
+    """
+    Manages the quiz question display and user interactions, handling the display of questions,
+    collection of answers, and navigation between questions.
+
+    Parameters:
+    score (int): The current score of the user which will be updated based on their answers.
+
+    How It Works:
+    1. **Initialize Skips**:
+       - `skips_left = [3]`:
+         - Initializes a variable to keep track of the number of skips the user has remaining.
+
+    2. **Display the Current Question**:
+       - `display_question(index, score)`:
+         - Creates and configures a new Tkinter window to display the current quiz question.
+         - Uses `Label` and `Canvas` widgets to show the question text and answer choices.
+         - `selected_answer_var` is a global `StringVar` used to track the selected answer.
+         
+       - **Function `next_question(selected_answer, score, text)`**:
+         - Records the user’s selected answer and updates the score if the answer is correct.
+         - Writes the question, correct answer, and user’s answer to a file named `quiz_results.txt`.
+         - Closes the current question window and either proceeds to the next question or shows the results window.
+
+    3. **Prepare Answer Choices**:
+       - Depending on the number of possible answers, the function selects the appropriate choices and shuffles them.
+       - `random.shuffle(answers)` ensures that answer choices appear in a random order to prevent bias.
+
+    4. **Display Answer Choices**:
+       - Uses `Radiobutton` widgets to present the answer choices to the user.
+       - Each `Radiobutton` is linked to `selected_answer_var` and triggers `next_question` with the selected answer when clicked.
+
+    5. **Skip Action**:
+       - If a question is skipped, the `selected_answer` is set to `"."` (default value for skipped questions).
+       - The function updates the quiz state and either continues to the next question or ends the quiz.
+
+    This function orchestrates the display and handling of quiz questions, ensuring that users can answer questions, skip them if needed, and progress through the quiz.
+    """
+    skips_left = [3]
+    def display_question(index,score):
+
+        questionwindow = Tk()# Create the Tkinter window for displaying the question
+        questionwindow.resizable(False, False)# Prevents the window from being resized
+        questionwindow.title("Year 10 Math Quiz")# Sets the title of the window
+        questionwindow.geometry("700x450")# Defines the size of the window
+        questionwindow.configure(bg="#d0e0e3")# Sets the background color of the window
+        questionwindow.geometry("%dx%d+%d+%d" % (700,450, 557,227.5))# Sets the size and position of the window
+        
+        # Create and place a heading for the question section
+        q_heading_canvas = Label(questionwindow, width=80, height=1, text="QUESTION", font="Verdana 18 ", bg="#cccccc")
+        q_heading_canvas.place(x=-245, y=-3) # Positions the heading on the window
+
+        # Create and place a label for the question number
+        q_intro_text = Label(questionwindow, width=20, borderwidth=1, highlightbackground="black", relief="solid",
+                             anchor="center", text=" QUESTION NUMBER:"+str(questions_answered[0]+1), font="Verdana 19", bg="#9fc5e8")
+        q_intro_text.place(x=187, y=50) # Positions the question number label on the window
+        
+        # Create a Canvas widget to hold the question text
+        q_canvas = Canvas(questionwindow, highlightbackground="black", height=200, width=300)
+        q_canvas.place(x=60, y=125) # Positions the canvas on the window
+
+        # Create and place a Label widget inside the Canvas to display the question text
+        question_text = questions[index] # Retrieves the question text based on the current index
+        q_text = Label(q_canvas, text=question_text, font="Verdana 18", wraplength=280)
+        q_text.place(relx=0.5, rely=0.5, anchor=CENTER) # Centers the question text within the canvas
+
+        # Initialize a list to keep track of selected answers
+        selected_answers=[]
+
+        # Initialize a global variable for tracking the selected answer
+        global selected_answer_var
+        selected_answer_var = StringVar(value=".") # Sets the default value to "." indicating no answer selected
+
+        def next_question(selected_answer,score,text):
+
+            # Open the file "quiz_results.txt" in append mode
+            with open("quiz_results.txt", "a") as file:
+
+
+                # Write the current question number and text to the file
+                file.write(f"Question {questions_answered[0] + 1}: {questions[questions_answered[0]]}\n")
+
+
+                # Write the correct answer for the current question to the file
+                file.write(f"Correct Answer {questions_answered[0] + 1}:  {correct_response[questions_answered[0]]}\n")
+
+                # Check if the selected answer is the default value ".", which indicates the question was skipped
+                if selected_answer == ".":  # Assuming that the default value of selected_answer_var is "." for skipped questions
+                    file.write(f"Selected Answer {questions_answered[0] + 1}: Skipped\n\n") # Record as skipped
+                else:
+                    # Write the selected answer to the file
+                    file.write(f"Selected Answer {questions_answered[0] + 1}: {selected_answer}\n\n")
+
+            # Append the selected answer to the list of selected answers
+            selected_answers.append(selected_answer)
+
+            # Update the score if the selected answer is correct
+            if selected_answer in correct_response:
+                score+=1
+
+            # Close the current question window    
+            questionwindow.destroy()
+
+            # Check if there are more questions to display
+            if questions_answered[0] < 9:
+                # Move to the next question
+                questions_answered[0] += 1
+                current_question_index[0] += 1
+                if current_question_index[0] < len(questions):
+
+                    # Display the next question
+                    display_question(current_question_index[0],score)
+                else:
+                    RESULT_W(score) # If no more questions, show the results
+            else:
+                RESULT_W(score) # If no more questions, show the results
+        
+        # Check the number of correct answers for the current question
+        if len(correct_answers[index]) == 2:
+            answers = [correct_answers[index][0], correct_answers[index][1]] # If there are 2 correct answers, use only those two answers
+        else:
+            # If there are 4 correct answers, use all four answers
+            answers = [correct_answers[index][0], correct_answers[index][1], 
+                       correct_answers[index][2], correct_answers[index][3]]
+            
+        # Shuffle the list of answers to randomize their order
+        random.shuffle(answers)
+
+        # Initialize an empty string to be used if needed (currently unused)
+        value=""
+        
+        # Create and place radio buttons for each answer choice
+        for i, text in enumerate(answers):   
+            Radiobutton(
+            questionwindow, # The parent window where the Radiobutton will be placed
+            borderwidth=0.5, # Border width of the Radiobutton
+            value=text, # The value associated with this Radiobutton, which is the text of the answer 
+            variable=selected_answer_var, # The variable that stores the selected answer
+            text=text, # The text displayed on the Radiobutton
+            font="Verdana 15", # Font style and size for the text
+            wraplength=280,  # Maximum width of the text before it wraps 
+            bg="#d0e0e3", # Background color of the Radiobutton
+            command=lambda text=text: next_question(text, score, text)  # Command to be executed when the Radiobutton is selected
+        ).place(x=410, y=130 + i * 50) # Position the Radiobutton within the window
+ 
+
+        def skip_action(score):
+            # Check if skips are available
+            if skips_left[0] > 0:
+                skips_left[0] -= 1 # Decrease the number of skips remaining
+                selected_answer = "." # Set the selected answer to "." to indicate the question was skipped 
+                next_question(selected_answer, score, selected_answer) # Call next_question with the skipped answer
+                questionwindow.destroy() # Close the current question window
+
+                if questions_answered[0] < 9: # Check if there are more questions to display
+
+                    # Move to the next question 
+                    questions_answered[0] += 1 
+                    current_question_index[0] += 1
+                    
+                    # Display the next question if available
+                    if current_question_index[0] < len(questions): 
+                        display_question(current_question_index[0], score)
+                    else:
+                        # Otherwise, show the results
+                        RESULT_W(score)
+                else:
+                    # If no more questions are left, show the results
+                    RESULT_W(score)
+
+            # Check if no skips are left        
+            if skips_left[0] == 0:
+                # Show an error message indicating that no skips are remaining 
+                messagebox.showerror('Skips', 'You have no remanining skips!')      
+ 
+        # Create and place a 'SKIP' button in the question windo
+        skip_button = Button(questionwindow, width=50, height=1, borderwidth=0.5,text="SKIP", font="Verdana 19", anchor="center",
+                              bg="#9fc5e8", command=lambda:skip_action(score)).place(x=-40, y=400)
+        
+    # Call the display_question function to show the current question
+    display_question(current_question_index[0],score)
+   
+def MAIN_W():
+    """
+    This function creates the main introductory window for the Year 10 Math Quiz.
+    It displays instructions and includes a 'Begin' button to start the quiz.
+    """
+    # Initialize the score to 0
+    score=0
+
+    # Create a new Tkinter window called 'introwindow'
+    introwindow = Tk()
+    introwindow.resizable(False, False) # Disable window resizing
+    introwindow.title("Year 10 Math Quiz") # Set the window title
+    introwindow.geometry("850x450")  # Set the window size to 850x450 pixels
+
+    # Set the window's background color and position it on the screen
+    introwindow.configure(bg="#d0e0e3")
+    introwindow.geometry("%dx%d+%d+%d" % (850,450, 457,227.5)) # Position window in the center of the screen
+    
+     # Create a heading label at the top of the window, showing "INTRODUCTION"
+    heading_canvas = Label(introwindow, width=80, height=1, text="INTRODUCTION", font="Verdana 16 ", bg= "#cccccc"  ).place(x=-95, y=-3) # Position the heading at the top of the window
+
+    # Display the introductory text explaining the quiz, rules, and how to begin
+    intro_text = Label(introwindow, width=40,borderwidth=1, highlightbackground= "black",relief="solid", anchor="center", text= "THIS QUIZ WILL TEST YOUR KNOWLEDGE \n ON YEAR 10 MATH \n \n"
+                       "THERE WILL BE A TOTAL OF 10 QUESTIONS.\n SELECT THE ANSWER CORRECT ANSWER OR SKIP \n 3 QUESTIONS \n \n"
+                       "PLEASE PRESS “BEGIN” ONCE YOU ARE READY"
+,font="Verdana 19", bg= "#9fc5e8"  ).place(x=110, y=80)  # Position the intro text in the middle of the window
+    
+    
+    # Create a 'BEGIN' button that starts the quiz by calling the Q_REPEAT function
+    # This button passes the 'introwindow' (for destruction) and 'score' (initially 0) as parameters
+    begin_button = Button(introwindow, width=15, height=1,borderwidth=0.5, text="BEGIN", font="Verdana 19", anchor="center",
+                          bg="#9fc5e8",  command=lambda: Q_REPEAT(introwindow,score) ).place(x=300, y=370) # Position the button at the bottom center of the window
+    
+
+
+    introwindow.mainloop() # Start the Tkinter main event loop for the intro window
+
+# Global variable to control program flow
+PROGRAM =1
+
+def TRY_AGAIN(resultswindow):
+    """
+    Function to handle the 'Try Again' action.
+    It resets the PROGRAM variable to 1 and closes the results window,
+    allowing the quiz to restart.
+    """
+
+    global PROGRAM # Access the global PROGRAM variable
+    PROGRAM= 1 # Set PROGRAM to 1 to indicate the quiz should restart
+    resultswindow.destroy() # Close the current results window
+
+# Main loop to control the quiz execution and restart functionality    
+while PROGRAM == 1:
+    """
+    Main quiz loop. The quiz will continue running as long as PROGRAM == 1.
+    It resets the variables, shuffles the questions, and prepares the system for a new quiz run.
+    """    
+
+    PROGRAM = 0 # Set PROGRAM to 0 to stop the loop after one run, unless TRY_AGAIN is triggered
+    score=0 # Initialize the score to 0 for a new quiz attempt
+    skips_left=3 # Reset the number of available skips to 3
+    questions_answered[0] = 0 # Reset the number of answered questions to 0
+    current_question_index[0] = 0 # Reset the current question index to 0
+
+    # Shuffle the combined list of questions and answers to randomize the quiz 
+    random.shuffle(qa_combined)
+
+    # Sets the text file
+    with open("quiz_results.txt", "w") as file:
+        file.write("Questions and Answers:\n\n") # Prepare the file to record quiz results
+
+    # Call the MAIN_W() function to start the quiz's introductory window
+    MAIN_W() # Initialize the quiz with the main intro window
